@@ -1,4 +1,4 @@
-# [B-Side Music App - Frontend]
+# B-Side Music App - Frontend
 
 
 
