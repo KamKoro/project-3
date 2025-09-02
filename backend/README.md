@@ -32,36 +32,10 @@ node seeds/seedCatalogSongs.js
 
 5. Run the server
 npm run dev
+```
 
+## Internal resources
 
-Server runs at:
-http://localhost:3000
+✏️ [Instructor Guide](./internal-resources/instructor-guide.md)
 
-API Routes
-Auth
-
-POST /auth/sign-up – Register user
-
-POST /auth/sign-in – Login user and return JWT
-
-Playlists
-
-GET /playlists – User’s playlists
-
-POST /playlists – Create playlist
-
-GET /playlists/:id – Single playlist
-
-PUT /playlists/:id – Update playlist
-
-DELETE /playlists/:id – Delete playlist
-
-POST /playlists/:id/songs – Add song
-
-DELETE /playlists/:id/songs/:songId – Remove song
-
-Songs
-
-GET /songs – Get songs (supports search query)
-
-GET /songs/:id – Single song
+🏗️ [Release Notes](./internal-resources/release-notes.md)
