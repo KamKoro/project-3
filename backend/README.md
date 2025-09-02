@@ -13,8 +13,8 @@ JWT Authentication
 
 Local Development
 1. Clone the repo
-git clone https://github.com/yourusername/hoot-music-backend.git
-cd hoot-music-backend
+git clone https://github.com/KamKoro/project-3/tree/main/backend
+cd backend
 
 2. Install dependencies
 npm install
@@ -23,7 +23,7 @@ npm install
 
 Create a .env file with:
 
-MONGODB_URI=mongodb://127.0.0.1:27017/hoot_music_app
+MONGODB_URI
 SECRET=your_jwt_secret
 PORT=3000
 
