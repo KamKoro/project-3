@@ -1,19 +1,25 @@
-# React JWT Auth Template
+# [B-Side Music App - Frontend]
 
-## About
+![App Screenshot](frontend/public/screenshots/playlist-screenshot.png)  
 
-This repo is a React JWT Auth template meant to be paired with a back-end app utilizing JWT tokens.
+## Overview
+B-Side Music is a full-stack music catalogue and playlist manager that allows users to create, customise, and share playlists.  
+Users can sign up, log in, and manage their personal library of songs.  
+I built this project to practice full CRUD functionality, authentication/authorisation, and to strengthen my MERN stack skills.
 
-## Getting started
+## Getting Started
+- **Deployed App:** [Live Site](https://your-deployed-link-here.com)  
+- **Planning Materials:** [Trello / Miro / Wireframes / ERD](https://trello.com/b/vjtlclzz/project-3-music-app)  
+- **Back-end Repo:** [B-Side-music-backend](https://github.com/KamKoro/project-3/tree/main/backend)  
 
-Fork and clone this repository to your local machine.
+To run locally:
+```bash
+git clone https://github.com/KamKoro/project-3/tree/main/frontend
+cd frontend
+npm install
+npm run dev
 
-After moving into the cloned directory, run `npm i` to download the dependencies.
-
-Create a `.env` file in the root of the project and add the following:
-
-```plaintext
-VITE_BACK_END_SERVER_URL=http://localhost:3000
-```
-
-Start the app with `npm run dev`.
+[Technologies Used]
+Node.js
+Express
+MongoDB & Mongoose

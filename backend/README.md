@@ -1,36 +1,67 @@
-# ![Express API - Hoot Back-End - Solution](./internal-resources/assets/hero.png)
+B-Side Music App – Backend
 
-## About
+This repository contains the backend for B-Side Music, a MERN application that allows users to browse a music catalogue, create playlists, and manage their personal library.
 
-This repo contains solution code for the [Express API - Hoot Back-End](https://git.generalassemb.ly/modular-curriculum-all-courses/express-api-hoot.git) lecture.
+For screenshots, full app description, setup instructions, and future plans, please see the Frontend Repository (https://github.com/KamKoro/project-3/tree/main/frontend)
 
-## Getting started
 
-Fork and clone this repository to your local machine.
+Tech Stack:
+Node.js
+Express
+MongoDB + Mongoose
+JWT Authentication
 
-After moving into the cloned directory, run `npm i` to download the dependencies.
+Local Development
+1. Clone the repo
+git clone https://github.com/yourusername/hoot-music-backend.git
+cd hoot-music-backend
 
-Create a `.env` file in the root of the project:
+2. Install dependencies
+npm install
 
-```bash
-touch .env
-```
+3. Environment variables
 
-and add your MongoDB URI and a secret JWT string to it. Your MongoDB URI will look something like the first entry, but with your username and password:
+Create a .env file with:
 
-```plaintext
-MONGODB_URI=mongodb+srv://<username>:<password>@sei.azure.mongodb.net/myApp?retryWrites=true
-JWT_SECRET=supersecret
-```
+MONGODB_URI=mongodb://127.0.0.1:27017/hoot_music_app
+SECRET=your_jwt_secret
+PORT=3000
 
-Start the app in your terminal with:
+4. Seed the database (optional)
+node seeds/seedCatalogSongs.js
 
-``` sh
+5. Run the server
 npm run dev
-```
 
-## Internal resources
 
-✏️ [Instructor Guide](./internal-resources/instructor-guide.md)
+Server runs at:
+http://localhost:3000
 
-🏗️ [Release Notes](./internal-resources/release-notes.md)
+API Routes
+Auth
+
+POST /auth/sign-up – Register user
+
+POST /auth/sign-in – Login user and return JWT
+
+Playlists
+
+GET /playlists – User’s playlists
+
+POST /playlists – Create playlist
+
+GET /playlists/:id – Single playlist
+
+PUT /playlists/:id – Update playlist
+
+DELETE /playlists/:id – Delete playlist
+
+POST /playlists/:id/songs – Add song
+
+DELETE /playlists/:id/songs/:songId – Remove song
+
+Songs
+
+GET /songs – Get songs (supports search query)
+
+GET /songs/:id – Single song
