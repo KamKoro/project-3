@@ -1,6 +1,7 @@
 # B-Side Music App - Frontend
 
-frontend/public/screenshots/playlist-screenshot.png
+![App Screenshot](public/screenshots/playlist-screenshot.png)
+
 
 ## Overview
 B-Side Music is a full-stack music catalogue and playlist manager that allows users to create, customise, and share playlists.  
