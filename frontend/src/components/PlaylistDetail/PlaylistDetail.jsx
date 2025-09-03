@@ -20,6 +20,7 @@ export default function PlaylistDetail() {
 
   // tiny transparent pixel
   const BLANK = "data:image/gif;base64,R0lGODlhAQABAAAAACw=";
+  const PLAYLIST_DEFAULT = "/covers/playlist-default.png";
 
   // Helper: normalize to public URL for local covers in /public/covers
   const toCoverSrc = (val) => {
@@ -30,7 +31,24 @@ export default function PlaylistDetail() {
     return `/covers/${val.replace(/^\/+/, "")}`;
   };
 
-  // Small cover component with graceful fallback + no broken icon
+  // Playlist top cover: always show an image; fallback to default on error/empty
+  function PlaylistCover({ url, name }) {
+    const initialSrc = toCoverSrc(url) || PLAYLIST_DEFAULT;
+    const [src, setSrc] = useState(initialSrc);
+    return (
+      <img
+        className="playlist-cover-img"
+        src={src}
+        alt={`${name} cover`}
+        loading="lazy"
+        decoding="async"
+        onError={() => setSrc(PLAYLIST_DEFAULT)}
+        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+      />
+    );
+  }
+
+  // Small cover component for song rows (keeps your text fallback)
   function Cover({ url, title }) {
     const [ok, setOk] = useState(Boolean(url));
     const src = toCoverSrc(url) || BLANK;
@@ -130,13 +148,34 @@ export default function PlaylistDetail() {
 
   return (
     <main className="container">
-      {/* Title */}
-      <h1 className="playlist-title">{playlist.name}</h1>
-      {playlist.description && (
-        <p style={{ opacity: 0.9, marginTop: 0, textAlign: "center" }}>
-          {playlist.description}
-        </p>
-      )}
+      {/* Hero header with defaulted playlist cover */}
+      <header
+        className="playlist-hero card"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "160px 1fr",
+          gap: "1rem",
+          alignItems: "center",
+          padding: "1rem",
+          marginBottom: "1rem",
+        }}
+      >
+        <div
+          className="playlist-hero-cover"
+          style={{ width: "160px", aspectRatio: "1 / 1", overflow: "hidden", borderRadius: "12px" }}
+        >
+          <PlaylistCover url={playlist.coverUrl} name={playlist.name} />
+        </div>
+        <div className="playlist-hero-meta" style={{ minWidth: 0 }}>
+          <h1 className="playlist-title" style={{ margin: 0, wordBreak: "break-word" }}>
+            {playlist.name}
+          </h1>
+          {playlist.description && (
+            <p style={{ opacity: 0.9, marginTop: ".25rem" }}>{playlist.description}</p>
+          )}
+        </div>
+      </header>
+
       {error && <p style={{ color: "crimson", textAlign: "center" }}>{error}</p>}
 
       {/* Top toolbar: Edit playlist (also enables remove chips), Add songs */}
@@ -152,7 +191,7 @@ export default function PlaylistDetail() {
         </button>
 
         <button className="btn" type="button" onClick={() => setShowAdd(true)}>
-          <strong>+ Add Songs</strong>
+          <strong>+ Add</strong>
         </button>
       </div>
 

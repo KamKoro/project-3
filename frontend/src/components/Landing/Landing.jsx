@@ -1,8 +1,18 @@
 const Landing = () => {
   return (
-    <main>
-      <h1>Hello, you are on the landing page for visitors.</h1>
-      <p> <a href="/sign-up"> Sign up now</a>, or <a href="/sign-in">sign in</a> to see your super secret dashboard!</p>
+    <main className="landing-page">
+      <div className="landing-card">
+        <h1>Welcome!</h1>
+        <p>
+          You are on the landing page for visitors.
+        </p>
+        <p>
+          <a href="/sign-up" className="btn">Sign up now</a> 
+          <span className="or"> or </span>
+          <a href="/sign-in" className="btn-outline">Sign in</a> 
+          to see your super secret dashboard!
+        </p>
+      </div>
     </main>
   );
 };

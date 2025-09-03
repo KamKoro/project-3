@@ -1,3 +1,4 @@
+// src/components/PlaylistsPage/PlaylistsPage.jsx
 import { useEffect, useState } from 'react';
 import * as playlists from '../../services/playlistService';
 import { Link } from 'react-router-dom';
@@ -37,17 +38,38 @@ export default function PlaylistsPage() {
       <h1>My Playlists</h1>
       {error && <p style={{ color: 'crimson' }}>{error}</p>}
 
-      {/* Playlist list */}
-      <ul className="grid" style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1rem' }}>
+      {/* Playlist grid */}
+      <ul
+        className="grid"
+        style={{
+          listStyle: 'none',
+          padding: 0,
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+          gap: '1rem',
+        }}
+      >
         {lists.map(p => (
-          <li key={p._id} className="card" style={{ padding: '1rem' }}>
-            <h3 style={{ margin: 0 }}>
-              <a href={`/playlists/${p._id}`}>{p.name}</a>
-            </h3>
-            <p>{p.description}</p>
-            <small>{p.isPublic ? 'Public' : 'Private'}</small>
-            <div style={{ marginTop: '.5rem', display: 'flex', gap: '.5rem' }}>
-              <a className="btn" href={`/playlists/${p._id}`}>Open</a>
+          <li key={p._id} className="card" style={{ padding: 0, overflow: 'hidden', borderRadius: 14 }}>
+            <Link to={`/playlists/${p._id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+              <div style={{ width: '100%', aspectRatio: '1 / 1', background: 'var(--bg-elev,#1a1a1a)' }}>
+                <img
+                  src={p.coverUrl || '/covers/playlist-default.png'}
+                  alt={`${p.name} cover`}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  loading="lazy"
+                />
+              </div>
+              <div style={{ padding: '0.75rem 0.9rem' }}>
+                <h3 style={{ margin: 0, fontSize: '1rem', lineHeight: 1.2 }}>{p.name}</h3>
+                {p.description && (
+                  <p style={{ margin: '0.25rem 0 0', fontSize: '.875rem', opacity: 0.85 }}>{p.description}</p>
+                )}
+                <small style={{ opacity: .7 }}>{p.isPublic ? 'Public' : 'Private'}</small>
+              </div>
+            </Link>
+            <div style={{ padding: '0 0.9rem 0.9rem', display: 'flex', gap: '.5rem' }}>
+              <Link className="btn" to={`/playlists/${p._id}`}>Open</Link>
               <button className="btn btn-danger" onClick={() => handleDelete(p._id)}>Delete</button>
             </div>
           </li>

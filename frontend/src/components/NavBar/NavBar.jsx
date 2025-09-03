@@ -15,7 +15,7 @@ const NavBar = () => {
     <nav>
       {user ? (
         <ul>
-          <li><strong>Playlistr</strong></li>
+          <li><strong>B-Side</strong></li>
           <li><Link to="/">Home</Link></li>
           <li><Link to="/playlists">Your Playlists</Link></li>
           <li>

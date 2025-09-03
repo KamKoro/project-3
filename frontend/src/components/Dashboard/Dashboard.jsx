@@ -61,9 +61,8 @@ export default function Dashboard() {
           const found = songById.get(it);
           if (found?.artist) artists.push(found.artist);
         } else if (it?._id || it?.id) {
-          if (it.artist) {
-            artists.push(it.artist);
-          } else {
+          if (it.artist) artists.push(it.artist);
+          else {
             const found = songById.get(String(it._id || it.id));
             if (found?.artist) artists.push(found.artist);
           }
@@ -75,9 +74,7 @@ export default function Dashboard() {
 
   const topArtists = useMemo(() => {
     const counts = new Map();
-    for (const a of allArtistsOnMyPlaylists) {
-      counts.set(a, (counts.get(a) || 0) + 1);
-    }
+    for (const a of allArtistsOnMyPlaylists) counts.set(a, (counts.get(a) || 0) + 1);
     return [...counts.entries()]
       .sort((a, b) => b[1] - a[1])
       .slice(0, 6)
@@ -99,9 +96,7 @@ export default function Dashboard() {
   }
 
   if (loading) {
-    return (
-      <main className="container"><p>Loading…</p></main>
-    );
+    return <main className="container"><p>Loading…</p></main>;
   }
 
   if (myPlaylists.length === 0) {
@@ -160,13 +155,13 @@ export default function Dashboard() {
         <h1 style={{ margin: 0 }}>Dashboard</h1>
         <div style={{ display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
           <Link className="btn" to="/playlists">Manage Playlists</Link>
-          <Link className="btn btn-outline" to="/songs">Song Catalogue ({catalogueCount})</Link>
+          {/* Song Catalogue button intentionally removed */}
         </div>
       </header>
 
       {err && <p style={{ color: "crimson" }}>{err}</p>}
 
-      {/* Recently created playlists */}
+      {/* Recently created playlists WITH COVER + DEFAULT */}
       <section className="card" style={{ padding: "1rem" }}>
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: ".75rem" }}>
           <h2 style={{ margin: 0 }}>Recently created</h2>
@@ -179,17 +174,32 @@ export default function Dashboard() {
             padding: 0,
             display: "grid",
             gap: "1rem",
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
           }}
         >
           {recentPlaylists.map((p) => (
-            <li key={p._id} className="card" style={{ padding: "1rem" }}>
-              <h3 style={{ marginTop: 0, marginBottom: 0 }}>
-                <Link to={`/playlists/${p._id}`} style={{ color: "inherit" }}>
-                  {p.name}
-                </Link>
-              </h3>
-              {/* Created At removed */}
+            <li key={p._id} className="card" style={{ padding: 0, borderRadius: 14, overflow: "hidden" }}>
+              <Link to={`/playlists/${p._id}`} style={{ color: "inherit", textDecoration: "none", display: "block" }}>
+                <div style={{ width: "100%", aspectRatio: "1 / 1", background: "var(--bg-elev,#1a1a1a)" }}>
+                  <img
+                    src={p.coverUrl || "/covers/playlist-default.png"}
+                    alt={`${p.name} cover`}
+                    loading="lazy"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  />
+                </div>
+                <div style={{ padding: ".75rem .9rem" }}>
+                  <h3 style={{ margin: 0, fontSize: "1rem", lineHeight: 1.2, wordBreak: "break-word" }}>
+                    {p.name}
+                  </h3>
+                  {p.description && (
+                    <p style={{ margin: ".25rem 0 0", fontSize: ".875rem", opacity: .85 }}>
+                      {p.description}
+                    </p>
+                  )}
+                  <small style={{ opacity: .7 }}>{p.isPublic ? "Public" : "Private"}</small>
+                </div>
+              </Link>
             </li>
           ))}
         </ul>

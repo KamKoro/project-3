@@ -15,6 +15,12 @@ function ensureObjectId(id) {
   }
 }
 
+// helper: allow http(s) urls or empty string
+function isHttpUrl(v) {
+  if (v === '' || v == null) return true;
+  return /^https?:\/\/.+/i.test(String(v));
+}
+
 // helper: compute stats + shape response
 function shapePlaylist(p) {
   const json = p.toJSON({ virtuals: false });
@@ -41,13 +47,18 @@ router.get('/', verifyToken, async (req, res, next) => {
 // ---------- Create ----------
 router.post('/', verifyToken, async (req, res, next) => {
   try {
+    const coverUrl = req.body.coverUrl || '';
+    if (!isHttpUrl(coverUrl)) return res.status(400).json({ message: 'coverUrl must be http(s) URL' });
+
     const doc = await Playlist.create({
       name: req.body.name,
       description: req.body.description,
-      isPublic: !!req.body.isPublic,
+      isPublic: !!req.body.isPublic,        // keep if your schema includes isPublic
+      coverUrl,                             // <-- NEW
       owner: req.user._id,
       songs: [],
     });
+
     const populated = await doc.populate({ path: 'songs', options: { sort: { title: 1 } } });
     res.status(201).json(shapePlaylist(populated));
   } catch (err) { next(err); }
@@ -73,9 +84,32 @@ router.patch('/:id', verifyToken, async (req, res, next) => {
     if (!p) return res.status(404).json({ message: 'Playlist not found' });
     if (p.owner.toString() !== req.user._id) return res.status(403).json({ message: 'Forbidden' });
 
-    p.name = req.body.name ?? p.name;
-    p.description = req.body.description ?? p.description;
+    if (req.body.name != null) p.name = req.body.name;
+    if (req.body.description != null) p.description = req.body.description;
     if (typeof req.body.isPublic === 'boolean') p.isPublic = req.body.isPublic;
+
+    if (req.body.coverUrl !== undefined) {
+      if (!isHttpUrl(req.body.coverUrl)) return res.status(400).json({ message: 'coverUrl must be http(s) URL' });
+      p.coverUrl = req.body.coverUrl || '';
+    }
+
+    await p.save();
+    await p.populate({ path: 'songs', options: { sort: { title: 1 } } });
+    res.json(shapePlaylist(p));
+  } catch (err) { next(err); }
+});
+
+// ---------- Update cover only (owner only) ----------
+router.patch('/:id/cover', verifyToken, async (req, res, next) => {
+  try {
+    ensureObjectId(req.params.id);
+    const p = await Playlist.findById(req.params.id);
+    if (!p) return res.status(404).json({ message: 'Playlist not found' });
+    if (p.owner.toString() !== req.user._id) return res.status(403).json({ message: 'Forbidden' });
+
+    const coverUrl = req.body.coverUrl || '';
+    if (!isHttpUrl(coverUrl)) return res.status(400).json({ message: 'coverUrl must be http(s) URL' });
+    p.coverUrl = coverUrl;
 
     await p.save();
     await p.populate({ path: 'songs', options: { sort: { title: 1 } } });

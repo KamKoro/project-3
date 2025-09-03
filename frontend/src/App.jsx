@@ -6,7 +6,7 @@ import SignUpForm from "./components/SignUpForm/SignUpForm.jsx";
 import SignInForm from "./components/SignInForm/SignInForm.jsx";
 import Landing from "./components/Landing/Landing.jsx";
 import Dashboard from "./components/Dashboard/Dashboard.jsx";
-import PlaylistsPage from "./components/Playlists/PlaylistsPage.jsx";
+import PlaylistsPage from "./components/Playlists/Playlists.jsx";
 import PlaylistDetail from "./components/PlaylistDetail/PlaylistDetail.jsx"; // ✅ add this
 
 import { UserContext } from "./contexts/UserContext.jsx";

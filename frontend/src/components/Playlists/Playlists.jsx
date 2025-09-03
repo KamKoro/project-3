@@ -27,18 +27,7 @@ export default function PlaylistsPage() {
       setLists(prev => [created, ...prev]);
       setForm({ name: '', description: '', isPublic: false });
       setShowForm(false);
-      // Go straight to the new playlist
       navigate(`/playlists/${created._id}`);
-    } catch (e) {
-      setError(e.message);
-    }
-  }
-
-  async function handleDelete(id) {
-    if (!confirm('Delete this playlist?')) return;
-    try {
-      await playlists.remove(id);
-      setLists(prev => prev.filter(p => p._id !== id));
     } catch (e) {
       setError(e.message);
     }
@@ -52,24 +41,50 @@ export default function PlaylistsPage() {
       {error && <p style={{ color: 'crimson' }}>{error}</p>}
 
       {isEmpty ? (
-        <section className="card" style={{ marginBottom: '1rem' }}>
+        <section className="card" style={{ marginBottom: '1rem', padding: '1rem' }}>
           <h2>Let’s create your first playlist</h2>
           <p>You don’t have any playlists yet.</p>
           <button className="btn" onClick={() => setShowForm(true)}>➕ New Playlist</button>
         </section>
       ) : (
-        <ul className="grid">
+        <ul
+          className="grid"
+          style={{
+            listStyle: 'none',
+            padding: 0,
+            display: 'grid',
+            gap: '1rem',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          }}
+        >
           {lists.map(p => (
-            <li key={p._id} className="card">
-              <h3 style={{ margin: 0 }}>
-                <Link to={`/playlists/${p._id}`}>{p.name}</Link>
-              </h3>
-              <p>{p.description}</p>
-              <small>{p.isPublic ? 'Public' : 'Private'}</small>
-              <div style={{ marginTop: '.5rem', display: 'flex', gap: '.5rem' }}>
-                <Link className="btn" to={`/playlists/${p._id}`}>Open</Link>
-                <button className="btn btn-danger" onClick={() => handleDelete(p._id)}>Delete</button>
-              </div>
+            <li
+              key={p._id}
+              className="card"
+              style={{ padding: 0, overflow: 'hidden', borderRadius: 14 }}
+            >
+              <Link
+                to={`/playlists/${p._id}`}
+                style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+              >
+                <div style={{ width: '100%', aspectRatio: '1 / 1', background: 'var(--bg-elev,#1a1a1a)' }}>
+                  <img
+                    src={p.coverUrl || '/covers/playlist-default.png'}
+                    alt={`${p.name} cover`}
+                    loading="lazy"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                </div>
+                <div style={{ padding: '.75rem .9rem' }}>
+                  <h3 style={{ margin: 0, fontSize: '1rem', lineHeight: 1.2 }}>{p.name}</h3>
+                  {p.description && (
+                    <p style={{ margin: '.25rem 0 0', fontSize: '.875rem', opacity: .85 }}>
+                      {p.description}
+                    </p>
+                  )}
+                  <small style={{ opacity: .7 }}>{p.isPublic ? 'Public' : 'Private'}</small>
+                </div>
+              </Link>
             </li>
           ))}
         </ul>
